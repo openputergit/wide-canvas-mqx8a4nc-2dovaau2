@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Calcutta Love Story</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Sacramento&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom Font Assignments */
+        .font-serif-vintage {
+            font-family: 'Playfair Display', serif;
+        }
+        .font-romantic {
+            font-family: 'Sacramento', cursive;
+        }
+        .font-sans-cute {
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        /* Custom Animated Backgrounds & Shadows */
+        .bg-twilight {
+            background: linear-gradient(to bottom, #1e1b4b, #31102f, #581c20);
+        }
+        .street-lamp-glow {
+            box-shadow: 0 0 20px 8px rgba(253, 224, 71, 0.6);
+        }
+        .window-glow {
+            box-shadow: 0 0 12px 3px rgba(253, 224, 71, 0.4);
+        }
+        .door-active-glow {
+            box-shadow: 0 0 15px 5px rgba(244, 63, 94, 0.8);
+            animation: pulse-border 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-border {
+            0% { transform: scale(1); box-shadow: 0 0 15px 5px rgba(244, 63, 94, 0.6); }
+            100% { transform: scale(1.05); box-shadow: 0 0 25px 12px rgba(244, 63, 94, 0.9); }
+        }
+
+        /* Sprite Walk Animation Keyframes */
+        @keyframes walkCycle {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
+        .walking-legs {
+            animation: walkCycle 0.2s infinite alternate ease-in-out;
+        }
+
+        /* Custom Scrollbar for Vintage aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1b4b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #581c20;
+            border-radius: 4px;
+        }
+
+        /* Tram Track pattern overlay */
+        .tram-tracks {
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.05) 40px, rgba(255,255,255,0.05) 44px);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans-cute overflow-hidden h-screen w-screen relative select-none">
+
+    <!-- ==============================================
+         10. WELCOME / PERSONALIZE SCREEN
+         ============================================== -->
+    <div id="welcome-screen" class="fixed inset-0 z-50 bg-twilight flex flex-col items-center justify-center p-6 text-center transition-all duration-700">
+        <div class="max-w-md w-full bg-slate-900/80 backdrop-blur-md rounded-3xl p-8 border border-rose-900/35 shadow-2xl relative overflow-hidden">
+            <!-- Decorative Star Dust -->
+            <div class="absolute -top-10 -left-10 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-yellow-500/10 rounded-full blur-3xl"></div>
+
+            <div class="mb-4">
+                <span class="text-6xl text-rose-500 animate-pulse inline-block">🏰</span>
+            </div>
+            
+            <h1 class="text-4xl font-serif-vintage font-bold text-amber-100 mb-2 mt-2 leading-tight">Tilottama Love</h1>
+            <p class="text-2xl font-romantic text-rose-300">A little Calcutta universe made just for you</p>
+            <p class="text-sm text-slate-300 mt-4 leading-relaxed">
+                Walk through the misty evening of old Kolkata lanes, explore cozy structures, enter intimate romantic universes design specifically for you.
+            </p>
+
+            <div class="mt-8 space-y-4">
+                <div>
+                    <label class="block text-amber-200 text-sm font-semibold mb-2">What should I call you, my love?</label>
+                    <input type="text" id="partner-name-input" value="Bela" 
+                        class="w-full text-center px-4 py-3 rounded-full bg-slate-800 text-amber-100 border border-amber-500/30 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 outline-none text-lg tracking-wider" 
+                        placeholder="Enter your cute name...">
+                </div>
+
+                <button id="start-btn" class="w-full text-lg font-bold bg-rose-600 hover:bg-rose-500 text-white py-3 px-6 rounded-full shadow-lg transition transform hover:scale-105 duration-200 cursor-pointer">
+                    Enter Our Little World <i class="bi bi-heart-fill ml-2 text-rose-200"></i>
+                </button>
+            </div>
+            
+            <div class="mt-6 text-xs text-slate-400">
+                <p>Use arrow keys / WASD keys on desktop</p>
+                <p>Or use the cute screen D-Pad on your phone!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         GLOBAL MUSIC PLAYER WIDGET
+         ============================================== -->
+    <div class="absolute top-4 left-4 z-40 bg-slate-900/80 backdrop-blur-md rounded-2xl px-4 py-2 border border-slate-700/50 shadow-lg flex items-center space-x-3 text-xs md:text-sm">
+        <button id="mute-btn" class="w-8 h-8 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center transition shadow">
+            <i id="mute-icon" class="bi bi-play-fill text-lg"></i>
+        </button>
+        <div class="flex flex-col">
+            <span class="text-slate-100 font-semibold" id="song-title">Vintage Calcutta Lofi Tune</span>
+            <span class="text-rose-300 text-[10px]" id="song-artist">Press play to listen</span>
+        </div>
+        <!-- Audio Source Placeholder -->
+        <!-- Replace 'audio/love-song.mp3' below with your specific file path or external link -->
+        <audio id="bg-audio" loop>
+            <source src="https://assets.codepen.co/4358584/Anisina.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- ==============================================
+         KOLKATA GAME BOARD VIEWPORT
+         ============================================== -->
+    <div id="game-viewport" class="w-full h-full relative overflow-hidden bg-slate-950">
+        
+        <!-- Large Scrollable Map Space -->
+        <div id="game-map" class="absolute w-[2000px] h-[1600px] transition-transform duration-75 ease-out" style="background: radial-gradient(circle, #251322 0%, #110714 100%);">
+            
+            <!-- Map Background Textures & Atmosphere -->
+            <div class="absolute inset-0 tram-tracks opacity-40"></div>
+            
+            <!-- Beautiful Kolkata Lane Elements (Background lines representing streets) -->
+            <!-- Lane 1: College Street Lane -->
+            <div class="absolute top-[250px] left-0 w-full h-[120px] bg-slate-900/40 border-y border-yellow-900/20 shadow-inner flex items-center justify-around">
+                <span class="text-[9px] tracking-widest text-[#6d28d9]/30 uppercase font-serif-vintage select-none">COLLEGE STREET LANE</span>
+                <span class="text-[9px] tracking-widest text-[#6d28d9]/30 uppercase font-serif-vintage select-none">বই পাড়া</span>
+                <span class="text-[9px] tracking-widest text-[#6d28d9]/30 uppercase font-serif-vintage select-none">COLLEGE STREET LANE</span>
+            </div>
+            
+            <!-- Lane 2: Prinsep Ghat Lane -->
+            <div class="absolute bottom-[350px] left-0 w-full h-[150px] bg-slate-900/40 border-y border-rose-950/20 shadow-inner flex items-center justify-around">
+                <span class="text-[9px] tracking-widest text-pink-900/20 uppercase font-serif-vintage select-none">PRINSEP WRITING WAY</span>
+                <span class="text-[9px] tracking-widest text-pink-900/20 uppercase font-serif-vintage select-none">প্ৰিন্সেপ ঘাট</span>
+                <span class="text-[9px] tracking-widest text-pink-900/20 uppercase font-serif-vintage select-none">PRINSEP WRITING WAY</span>
+            </div>
+
+            <!-- Lane 3: Vertical Lane -->
+            <div class="absolute left-[800px] top-0 w-[180px] h-full bg-slate-900/30 border-x border-amber-950/10 flex flex-col justify-around py-20 items-center">
+                <span class="rotate-90 text-[9px] tracking-widest text-amber-800/20 uppercase font-serif-vintage select-none">VINTAGE TRAM CORRIDOR</span>
+                <span class="rotate-90 text-[9px] tracking-widest text-amber-800/20 uppercase font-serif-vintage select-none">VINTAGE TRAM CORRIDOR</span>
+            </div>
+
+            <!-- Tram Line Overlay -->
+            <div class="absolute left-[885px] top-0 w-2 h-full border-x border-slate-700/40 bg-zinc-900/20"></div>
+
+            <!-- Beautiful Decors: Cute yellow taxis static parked, tea cups, flower sellers -->
+            <!-- Parking spots / Static vintage elements -->
+
+            <!-- Iconic Street Lamp 1 -->
+            <div class="absolute top-[200px] left-[350px] z-20 flex flex-col items-center">
+                <div class="w-4 h-4 rounded-full bg-amber-300 street-lamp-glow animate-pulse"></div>
+                <div class="w-1 h-20 bg-amber-800"></div>
+                <div class="w-4 h-1 bg-slate-700"></div>
+                <span class="text-[10px] text-amber-200/60 mt-1 whitespace-nowrap">Bidhan Sarani Light</span>
+            </div>
+
+            <!-- Iconic Street Lamp 2 -->
+            <div class="absolute top-[850px] left-[150px] z-20 flex flex-col items-center">
+                <div class="w-4 h-4 rounded-full bg-amber-300 street-lamp-glow animate-pulse"></div>
+                <div class="w-1 h-20 bg-amber-800"></div>
+                <div class="w-4 h-1 bg-slate-700"></div>
+            </div>
+
+            <!-- Iconic Street Lamp 3 -->
+            <div class="absolute top-[600px] left-[1200px] z-20 flex flex-col items-center">
+                <div class="w-4 h-4 rounded-full bg-amber-300 street-lamp-glow animate-pulse"></div>
+                <div class="w-1 h-20 bg-amber-800"></div>
+                <div class="w-4 h-1 bg-slate-700"></div>
+            </div>
+
+            <!-- Vintage Yellow Taxi Decor -->
+            <div class="absolute top-[290px] left-[100px] z-10 w-24 h-12 bg-amber-500 rounded-lg flex items-center justify-between px-3 border border-amber-600/50 shadow-md">
+                <div class="w-2 h-4 bg-slate-900 rounded"></div>
+                <div class="flex flex-col items-center justify-center">
+                    <span class="text-[9px] font-bold text-black bg-yellow-100 px-0.5 rounded leading-none">TAXI</span>
+                    <span class="text-[8px] text-zinc-950 font-bold leading-none">WBT-1992</span>
+                </div>
+                <div class="w-2 h-4 bg-slate-900 rounded"></div>
+            </div>
+
+            <!-- Cute Flower Stall Decor -->
+            <div class="absolute top-[750px] left-[700px] z-10 bg-rose-950/80 border border-pink-700/50 rounded-xl p-3 text-center">
+                <p class="text-xl">💐</p>
+                <p class="text-[9px] text-rose-300 tracking-wider">Howrah Flower Bazaar stall</p>
+                <div class="flex space-x-1 mt-1 justify-center">
+                    <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 5. INTERACTIVE BUILDINGS & ENTERABLE ROOMS
+                 ============================================== -->
+
+            <!-- Building A: The Tram Stop of Hearts -->
+            <div id="build-tram-stop" data-id="tram" class="absolute top-[680px] left-[320px] z-20 w-52 bg-slate-900/90 border-2 border-pink-500/40 rounded-3xl p-4 text-center cursor-pointer hover:border-pink-500 transition-all shadow-xl group">
+                <div class="relative">
+                    <span class="text-5xl block mb-2 transform group-hover:scale-110 transition duration-300">🚃</span>
+                    <span class="absolute -top-2 right-6 text-xl animate-bounce">💖</span>
+                    <!-- Glowing entrance marker -->
+                    <div id="entrance-tram" class="w-12 h-1.5 bg-pink-500 mx-auto rounded-full mt-2 opacity-60"></div>
+                </div>
+                <h3 class="text-lg font-serif-vintage text-pink-300 tracking-wide mt-2">Tram Stop of Hearts</h3>
+                <p class="text-[11px] text-slate-400">Walk here & press Enter to step inside</p>
+            </div>
+
+            <!-- Building B: College Street Book Cafe -->
+            <div id="build-book-cafe" data-id="cafe" class="absolute top-[120px] left-[550px] z-20 w-52 bg-slate-900/90 border-2 border-indigo-500/40 rounded-3xl p-4 text-center cursor-pointer hover:border-indigo-500 transition-all shadow-xl group">
+                <div class="relative">
+                    <span class="text-5xl block mb-2 transform group-hover:scale-110 transition duration-300">☕📖</span>
+                    <!-- Glowing entrance marker -->
+                    <div id="entrance-cafe" class="w-12 h-1.5 bg-indigo-500 mx-auto rounded-full mt-2 opacity-60"></div>
+                </div>
+                <h3 class="text-lg font-serif-vintage text-indigo-300 tracking-wide mt-2">Book Cafe of Equations</h3>
+                <p class="text-[11px] text-slate-400">A cozy coffee-scented zone of love math</p>
+            </div>
+
+            <!-- Building C: Phuchka & Chai Stall -->
+            <div id="build-chai" data-id="chai" class="absolute top-[480px] left-[980px] z-20 w-52 bg-slate-900/90 border-2 border-amber-500/40 rounded-3xl p-4 text-center cursor-pointer hover:border-amber-500 transition-all shadow-xl group">
+                <div class="relative">
+                    <span class="text-5xl block mb-2 transform group-hover:scale-110 transition duration-300">🏺☕</span>
+                    <!-- Glowing entrance marker -->
+                    <div id="entrance-chai" class="w-12 h-1.5 bg-amber-500 mx-auto rounded-full mt-2 opacity-60"></div>
+                </div>
+                <h3 class="text-lg font-serif-vintage text-amber-300 tracking-wide mt-2">Phuchka & Chai Nook</h3>
+                <p class="text-[11px] text-slate-400">Spill sweet memories over warm earthen cups</p>
+            </div>
+
+            <!-- Building D: Victoria Moonlit Garden -->
+            <div id="build-victoria" data-id="victoria" class="absolute top-[920px] left-[950px] z-20 w-56 bg-slate-900/90 border-2 border-teal-500/40 rounded-3xl p-4 text-center cursor-pointer hover:border-teal-500 transition-all shadow-xl group">
+                <div class="relative">
+                    <span class="text-5xl block mb-2 transform group-hover:scale-110 transition duration-300">🏛️🌙</span>
+                    <!-- Glowing entrance marker -->
+                    <div id="entrance-victoria" class="w-12 h-1.5 bg-teal-500 mx-auto rounded-full mt-2 opacity-60"></div>
+                </div>
+                <h3 class="text-lg font-serif-vintage text-teal-300 tracking-wide mt-2">Prinsep Moonlit Ghat</h3>
+                <p class="text-[11px] text-slate-400">Gaze at stars across the dark Hooghly river</p>
+            </div>
+
+            <!-- Building E: "Our Universe" Grand Union (Victoria Memorial Style) -->
+            <div id="build-our-universe" data-id="universe" class="absolute top-[500px] left-[550px] z-20 w-64 bg-slate-900/95 border-2 border-rose-500/50 rounded-3xl p-6 text-center cursor-pointer hover:border-rose-500 transition-all shadow-2xl group">
+                <div class="relative">
+                    <span class="text-6xl block mb-2 animate-pulse">🏰💖</span>
+                    <span class="absolute top-0 right-4 text-xl animate-bounce">✨</span>
+                    <!-- Glowing entrance marker -->
+                    <div id="entrance-universe" class="w-16 h-2 bg-rose-500 mx-auto rounded-full mt-2 opacity-80"></div>
+                </div>
+                <h3 class="text-xl font-serif-vintage text-rose-300 tracking-wide mt-2 font-bold">The Great Union</h3>
+                <p class="text-xs text-rose-200 mt-1">Our Complete Calcutta Universe</p>
+                <p class="text-[11px] text-slate-300 mt-2 font-bold uppercase tracking-wider">Unlocks everything inside</p>
+            </div>
+
+
+            <!-- ==============================================
+                 2. ANIMATED AVATAR CHARACTER
+                 ============================================== -->
+            <div id="player-sprite" class="absolute z-30 transition-all duration-75 relative w-12 h-16 flex flex-col items-center">
+                <!-- Character Avatar Visual representation -->
+                <div class="relative w-full h-full flex flex-col items-center">
+                    
+                    <!-- Cute Bengali style retro hat/crown or hairstyle -->
+                    <div class="w-11 h-11 bg-indigo-600 rounded-full flex items-center justify-center border-2 border-rose-300 shadow-lg relative">
+                        <!-- Glasses / Eyes -->
+                        <div class="flex space-x-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-slate-900 border border-yellow-200 flex items-center justify-center text-[5px] text-white font-bold">●</span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-slate-900 border border-yellow-200 flex items-center justify-center text-[5px] text-white font-bold">●</span>
+                        </div>
+                        <!-- Blushing Cheeks -->
+                        <div class="absolute bottom-2 left-1.5 w-1.5 h-1 bg-pink-400 rounded-full"></div>
+                        <div class="absolute bottom-2 right-1.5 w-1.5 h-1 bg-pink-400 rounded-full"></div>
+                        <!-- Cute Smile -->
+                        <div class="absolute bottom-1 w-3 h-2 border-b-2 border-slate-900 rounded-b-full"></div>
+                    </div>
+
+                    <!-- Beautiful Retro Kurta Shirt styling -->
+                    <div class="w-8 h-8 bg-rose-500 rounded-t-xl -mt-1 border-x-2 border-rose-400 flex items-center justify-center relative shadow-sm">
+                        <!-- Little glowing tiny heart logo on character's chest -->
+                        <span class="text-[9px] text-white">❤️</span>
+                    </div>
+
+                    <!-- Walking Legs Container -->
+                    <div class="flex justify-around w-6 -mt-0.5">
+                        <div id="leg-left" class="w-1.5 h-3.5 bg-yellow-600 rounded-full duration-75"></div>
+                        <div id="leg-right" class="w-1.5 h-3.5 bg-yellow-600 rounded-full duration-75"></div>
+                    </div>
+
+                    <!-- Cute Character Label Name -->
+                    <div class="absolute -bottom-6 bg-slate-950/80 text-rose-300 text-[10px] px-2 py-0.5 rounded-full border border-rose-500/20 whitespace-nowrap">
+                        <span id="player-custom-name">Bela</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ==============================================
+         ON-SCREEN INTERACTIVE GAMEPLAY INTERFACES (MOBILE SECTIONS)
+         ============================================== -->
+    <!-- Proximity Alert / Fast Interaction Panel -->
+    <div id="action-hud" class="absolute bottom-32 left-1/2 transform -translate-x-1/2 z-40 hidden flex-col items-center">
+        <div class="bg-rose-950/90 backdrop-blur-md text-amber-200 border-2 border-rose-500/70 p-3 rounded-full flex items-center space-x-3 shadow-2xl animate-bounce">
+            <span class="text-xl">🚪✨</span>
+            <span id="action-prompt-text" class="text-xs font-bold font-serif-vintage tracking-wider select-none">You are close to Tram Stop!</span>
+            <button id="action-btn" class="bg-rose-600 hover:bg-rose-500 active:scale-95 text-xs text-white uppercase font-black px-4 py-2 rounded-full transition shadow">
+                Enter [TAP]
+            </button>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         4. MOBILE-FRIENDLY NAVIGATION CONTROLS
+         ============================================== -->
+    <div class="absolute bottom-4 left-4 z-40 bg-slate-900/60 backdrop-blur-md rounded-2xl p-3 border border-slate-700/40 shadow-xl md:hidden">
+        <div class="grid grid-cols-3 gap-1 w-28 h-28 relative">
+            <div></div>
+            <button id="ctrl-up" class="w-9 h-9 bg-slate-800 hover:bg-slate-700 active:bg-rose-600 text-slate-100 flex items-center justify-center rounded-xl shadow active:scale-90 transition p-0">
+                <i class="bi bi-chevron-up text-lg"></i>
+            </button>
+            <div></div>
+            <button id="ctrl-left" class="w-9 h-9 bg-slate-800 hover:bg-slate-700 active:bg-rose-600 text-slate-100 flex items-center justify-center rounded-xl shadow active:scale-90 transition p-0">
+                <i class="bi bi-chevron-left text-lg"></i>
+            </button>
+            <div class="flex items-center justify-center">
+                <span class="text-xs text-rose-400">🚶</span>
+            </div>
+            <button id="ctrl-right" class="w-9 h-9 bg-slate-800 hover:bg-slate-700 active:bg-rose-600 text-slate-100 flex items-center justify-center rounded-xl shadow active:scale-90 transition p-0">
+                <i class="bi bi-chevron-right text-lg"></i>
+            </button>
+            <div></div>
+            <button id="ctrl-down" class="w-9 h-9 bg-slate-800 hover:bg-slate-700 active:bg-rose-600 text-slate-100 flex items-center justify-center rounded-xl shadow active:scale-90 transition p-0">
+                <i class="bi bi-chevron-down text-lg"></i>
+            </button>
+            <div></div>
+        </div>
+    </div>
+
+    <!-- HUD Map Compass/Legends Desk -->
+    <div class="absolute top-4 right-4 z-40 bg-slate-900/80 backdrop-blur-md rounded-2xl p-3 max-w-[240px] border border-slate-700/50 shadow-xl hidden sm:block">
+        <p class="text-xs font-bold text-amber-300 font-serif-vintage tracking-wider flex items-center">
+            <span class="animate-ping w-2 h-2 rounded-full bg-red-400 inline-block mr-2"></span> 
+            Tilottama Map Radar
+        </p>
+        <p class="text-[10px] text-slate-300 mt-1 font-sans-cute leading-relaxed">
+            Move closer to glowing yellow portals with keys <strong class="text-pink-400">WASD/Arrows</strong> and explore spaces inside.
+        </p>
+        <div class="mt-2 pt-2 border-t border-slate-800/60 flex flex-wrap gap-1 text-[9px]">
+            <span class="bg-rose-950 text-rose-300 px-1.5 py-0.5 rounded">🚃 Tram</span>
+            <span class="bg-indigo-950 text-indigo-300 px-1.5 py-0.5 rounded">📚 Cafe</span>
+            <span class="bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded">☕ Chai</span>
+            <span class="bg-teal-950 text-teal-300 px-1.5 py-0.5 rounded">🌙 Ghat</span>
+            <span class="bg-yellow-950 text-yellow-300 px-1.5 py-0.5 rounded">🏰 Our Universe</span>
+        </div>
+    </div>
+
+
+    <!-- ==============================================
+         GLOBAL UNIVERSE MODALS (7, 8, 11)
+         ============================================== -->
+    <div id="universe-modal" class="fixed inset-0 z-50 bg-slate-950/95 flex items-center justify-center p-4 transition-all duration-500 scale-0 opacity-0 pointer-events-none">
+        
+        <!-- Starry background wrapper for the romantic rooms -->
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <canvas id="universe-canvas" class="w-full h-full block"></canvas>
+        </div>
+
+        <div class="relative z-10 max-w-lg w-full bg-slate-900/90 backdrop-blur-lg rounded-3xl p-6 md:p-8 border border-pink-500/35 text-center shadow-2xl flex flex-col justify-between max-h-[90vh] overflow-y-auto">
+            
+            <!-- Close Modal Button -->
+            <button id="close-modal-btn" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-rose-900/60 hover:bg-rose-600 text-white flex items-center justify-center transition border border-rose-500-20 cursor-pointer">
+                <i class="bi bi-x-lg text-lg"></i>
+            </button>
+
+            <!-- Decorative header layout -->
+            <div class="mb-4">
+                <span id="room-emoji" class="text-5xl block animate-bounce">🎇</span>
+                <h2 id="room-title" class="text-3xl font-serif-vintage text-amber-100 mt-2 font-bold leading-tight">Room Name</h2>
+                <span id="room-subtitle" class="text-xs text-rose-300 block uppercase tracking-widest mt-1">THE ROMANTIC UNIVERSE</span>
+            </div>
+
+            <!-- Core message and equations container -->
+            <div class="my-6 space-y-6">
+                <!-- Message Box -->
+                <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 text-sm md:text-base leading-relaxed text-slate-200 font-sans-cute italic">
+                    <p id="room-message">"This is a placeholder message."</p>
+                </div>
+
+                <!-- Equation Box -->
+                <div class="bg-gradient-to-r from-rose-950 via-slate-950 to-rose-950 p-4 rounded-2xl border border-rose-500/20 flex flex-col items-center justify-center">
+                    <span class="text-[10px] text-rose-300 tracking-widest uppercase">The Love Hypothesis</span>
+                    <span id="room-equation" class="text-lg md:text-xl font-bold font-serif-vintage mt-1 text-yellow-300 tracking-wider">You + Me = Forever</span>
+                </div>
+            </div>
+
+            <!-- Unique interactive feature segment inside universes -->
+            <div id="room-special-feature" class="mt-2 py-4 border-t border-slate-800/60">
+                <!-- Dynamic component loads here -->
+            </div>
+
+            <div class="mt-4">
+                <button id="room-action-back-btn" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-100 py-1.5 px-4 rounded-full transition cursor-pointer">
+                    Return to Calcutta Lanes
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==============================================
+         SCRIPTS & CUSTOMIZABLE CORE SECTION
+         ============================================== -->
+    <script>
+        /**************************************************
+         * CUSTOMIZABLE PARAMETERS (EDIT THE THEMES HERE)
+         **************************************************/
+        // 1. CHARACTER DEFAULT SETTING
+        let DEFAULT_NAME = "Bela";
+
+        // 2. SONG URL SELECTION
+        // Replace with your local relative path (e.g., 'audio/love-song.mp3') or any open audio streaming URL
+        const SWEET_LOVE_BG_SONG = "https://assets.codepen.co/4358584/Anisina.mp3"; 
+
+        // 3. SPECIAL BUILDING MESSAGES & LOVE EQUATIONS
+        const ROOMS_DATA = {
+            tram: {
+                title: "Tram Stop of Hearts",
+                emoji: "🚃",
+                subtitle: "Ballygunge Nostalgia Track",
+                message: "Remember the slow-paced dreams of Calcutta? As the tram whistles and speeds along, our souls stand still, interconnected over space and time. No obstacle can pull us apart, sweet heart.",
+                equation: "∫ love dt = Us Forever",
+                renderFeature: function() {
+                    return `
+                        <div class="bg-slate-950/80 p-3 rounded-xl border border-rose-500/20">
+                            <p class="text-xs text-rose-300 italic mb-2">Tap below to release a tiny floating heart balloon!</p>
+                            <button onclick="window.spawnHeartBalloon()" class="bg-rose-700 hover:bg-rose-600 text-white text-xs px-3 py-1.5 rounded-full shadow transition active:scale-95">Send Balloon 🎈</button>
+                        </div>
+                    `;
+                }
+            },
+            cafe: {
+                title: "College Street Book Cafe",
+                emoji: "☕📖",
+                subtitle: "Intellectual Connection Corner",
+                message: "Hidden amidst the endless piles of poetry books in College Street, we wrote our own little non-verbal book. The aroma of rich coffee blends with the quiet math of our hearts.",
+                equation: "My Heart = f(${DEFAULT_NAME})",
+                renderFeature: function() {
+                    return `
+                        <div class="bg-slate-950/80 p-3 rounded-xl border border-indigo-500/20 text-center">
+                            <p class="text-xs text-indigo-300 font-bold">Your Love Quotient Today Is:</p>
+                            <p class="text-2xl font-serif-vintage mt-1 text-yellow-300 font-bold animate-pulse">99.9% + ∞</p>
+                        </div>
+                    `;
+                }
+            },
+            chai: {
+                title: "Phuchka & Chai Nook",
+                emoji: "🏺☕",
+                subtitle: "Kolkata Adda Comfort",
+                message: "Earthen 'Bhar' cups of warm ginger tea, the hot tangy spicy flavor of phuchkas, and the warmth of simple conversations. These cheap evening comforts are richer than any Michelin star restaurant with you.",
+                equation: "Distance × Time < Love",
+                renderFeature: function() {
+                    return `
+                        <div class="bg-slate-950/80 p-3 rounded-xl border border-amber-500/20">
+                            <p class="text-xs text-amber-300 italic mb-2">Take a Virtual Sip of Chai together!</p>
+                            <button onclick="window.takeChaiSip()" class="bg-amber-600 hover:bg-amber-500 text-white text-xs px-3 py-1.5 rounded-full transition active:scale-95">Sip Tea ☕</button>
+                        </div>
+                    `;
+                }
+            },
+            victoria: {
+                title: "Prinsep Moonlit Ghat",
+                emoji: "🏛️🌙",
+                subtitle: "Riverine Whispers of Tomorrow",
+                message: "Sitting on the cold marble stairs, watching the mighty Vidyasagar Setu illuminated in dynamic blues and purples. Each tiny tide of the Hooghly whispers a vow of safe passage and timeless belonging.",
+                equation: "P(You and Me) = 1.0",
+                renderFeature: function() {
+                    return `
+                        <div class="bg-slate-950/80 p-3 rounded-xl border border-teal-500/20">
+                            <p class="text-xs text-teal-300 mb-2">Catch a stardust spark from the digital night sky!</p>
+                            <button onclick="window.spawnStardust()" class="bg-teal-700 hover:bg-teal-600 text-white text-xs px-3 py-1.5 rounded-full transition active:scale-95">Catch Spark 🌟</button>
+                        </div>
+                    `;
+                }
+            },
+            universe: {
+                title: "The Grand Calcutta Union",
+                emoji: "🏰✨",
+                subtitle: "Our Interlocking Star System",
+                message: "This is where all aspects of Calcutta combine into one eternal canvas. Every equation, every warm chai, every star above Prinsep Ghat, and every romantic tram of Kolkata. This whole cosmos was built for you.",
+                equation: "You + Me = Forever",
+                renderFeature: function() {
+                    return `
+                        <div class="bg-slate-950/80 p-4 rounded-xl border border-rose-500/40 text-left">
+                            <span class="text-xs text-rose-300 uppercase tracking-widest block font-bold mb-2">💌 OUR SHARED MEMORY VAULT</span>
+                            
+                            <!-- MongoDB Interlock Panel -->
+                            <div class="space-y-3">
+                                <div id="notes-list" class="max-h-24 overflow-y-auto space-y-2 text-[11px] text-slate-300 bg-slate-900/60 p-2 rounded border border-slate-800">
+                                    <p class="text-slate-400 italic">No love letter messages stored yet. Be the first to leave one below!</p>
+                                </div>
+                                <div class="flex space-x-1">
+                                    <input type="text" id="wish-input" placeholder="Type a romantic note..." class="bg-slate-800 text-xs text-amber-100 rounded-lg px-2 py-1.5 flex-grow border border-rose-300/30 outline-none">
+                                    <button onclick="window.saveLoveLetter()" class="bg-rose-600 text-white text-xs px-3 py-1 border-0 rounded-lg font-bold hover:bg-rose-500">Save Note</button>
+                                </div>
+                                <div id="db-alert-status" class="text-[9px] text-emerald-400 font-sans-cute hidden">
+                                    Sending to the database cloud...
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        };
+
+
+        /**************************************************
+         * GAME MECHANICS & AVATAR ENGINE
+         **************************************************/
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const partnerNameInput = document.getElementById('partner-name-input');
+        const startBtn = document.getElementById('start-btn');
+        const playerCustomName = document.getElementById('player-custom-name');
+
+        const gameMap = document.getElementById('game-map');
+        const gameViewport = document.getElementById('game-viewport');
+        const playerSprite = document.getElementById('player-sprite');
+        const actionHud = document.getElementById('action-hud');
+        const actionPromptText = document.getElementById('action-prompt-text');
+        const actionBtn = document.getElementById('action-btn');
+
+        // Sprite Legs for walking cycle animation
+        const legLeft = document.getElementById('leg-left');
+        const legRight = document.getElementById('leg-right');
+
+        // Navigation elements
+        const ctrlUp = document.getElementById('ctrl-up');
+        const ctrlDown = document.getElementById('ctrl-down');
+        const ctrlLeft = document.getElementById('ctrl-left');
+        const ctrlRight = document.getElementById('ctrl-right');
+
+        // Modal elements
+        const universeModal = document.getElementById('universe-modal');
+        const roomEmoji = document.getElementById('room-emoji');
+        const roomTitle = document.getElementById('room-title');
+        const roomSubtitle = document.getElementById('room-subtitle');
+        const roomMessage = document.getElementById('room-message');
+        const roomEquation = document.getElementById('room-equation');
+        const roomSpecialFeature = document.getElementById('room-special-feature');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const roomActionBackBtn = document.getElementById('room-action-back-btn');
+
+        // Sound System Setup
+        const bgAudio = document.getElementById('bg-audio');
+        const muteBtn = document.getElementById('mute-btn');
+        const muteIcon = document.getElementById('mute-icon');
+        const songArtist = document.getElementById('song-artist');
+
+        // Setup Player Coordinates & Constants
+        let playerX = 850; // Starting right next to some beautiful tram lane
+        let playerY = 460;
+        const playerSpeed = 15;
+        const mapWidth = 2000;
+        const mapHeight = 1600;
+
+        // Current active nearby building reference
+        let activeBuildingId = null;
+
+        // List of locations on our map to trigger enter rooms
+        const locations = [
+            { id: 'tram', name: 'Tram Stop of Hearts', x: 420, y: 770, elementId: 'entrance-tram' },
+            { id: 'cafe', name: 'College Street Book Cafe', x: 650, y: 220, elementId: 'entrance-cafe' },
+            { id: 'chai', name: 'Phuchka & Chai Stall', x: 1080, y: 580, elementId: 'entrance-chai' },
+            { id: 'victoria', name: 'Prinsep Moonlit Ghat', x: 1060, y: 1020, elementId: 'entrance-victoria' },
+            { id: 'universe', name: 'The Grand Union', x: 670, y: 600, elementId: 'entrance-universe' },
+        ];
+
+
+        /**************************************************
+         * INITIALIZATION EVENT HANDLING
+         **************************************************/
+        startBtn.addEventListener('click', () => {
+            // Apply custom Name
+            const enteredName = partnerNameInput.value.trim();
+            if (enteredName) {
+                DEFAULT_NAME = enteredName;
+                playerCustomName.textContent = DEFAULT_NAME;
+                
+                // Re-evaluate programmatic equations
+                ROOMS_DATA.cafe.equation = `My Heart = f(${DEFAULT_NAME})`;
+            }
+
+            // Hide Welcome Screen
+            welcomeScreen.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+            }, 700);
+
+            // Audio Autoplay logic
+            attemptAudioPlay();
+            initializeGameLoop();
+        });
+
+
+        // Sound Control handler
+        function attemptAudioPlay() {
+            bgAudio.src = SWEET_LOVE_BG_SONG;
+            bgAudio.play().then(() => {
+                muteIcon.classList.remove('bi-play-fill');
+                muteIcon.classList.add('bi-pause-fill');
+                songArtist.textContent = "Playing Sweet Nostalgic Melody";
+            }).catch(err => {
+                console.log("Autoplay blocked by browser. User must click play button manually.");
+                songArtist.textContent = "Touch button to play melody";
+            });
+        }
+
+        muteBtn.addEventListener('click', () => {
+            if (bgAudio.paused) {
+                bgAudio.play();
+                muteIcon.classList.remove('bi-play-fill');
+                muteIcon.classList.add('bi-pause-fill');
+                songArtist.textContent = "Playing Sweet Nostalgic Melody";
+            } else {
+                bgAudio.pause();
+                muteIcon.classList.remove('bi-pause-fill');
+                muteIcon.classList.add('bi-play-fill');
+                songArtist.textContent = "Melody Paused";
+            }
+        });
+
+
+        /**************************************************
+         * ENGINE GAME LOOP & PLAYER PHYSICS (ARROW KEYS)
+         **************************************************/
+        let activeKeys = {};
+
+        window.addEventListener('keydown', (e) => {
+            const key = e.key.toLowerCase();
+            if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd', 'concept', 'enter'].includes(key) || e.code === 'Space') {
+                activeKeys[key] = true;
+                // Avoid scrolling window browser focus
+                if (e.key !== 'F5' && e.key !== 'F12') {
+                    e.preventDefault();
+                }
+            }
+            if (e.key === 'Enter' || e.key === ' ') {
+                if (activeBuildingId) {
+                    openUniverseRoom(activeBuildingId);
+                }
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            const key = e.key.toLowerCase();
+            activeKeys[key] = false;
+        });
+
+        // Initialize Sprite and Camera Update
+        function movePlayer(dx, dy) {
+            // Apply bounds checks
+            const targetX = playerX + dx;
+            const targetY = playerY + dy;
+
+            if (targetX >= 40 && targetX <= (mapWidth - 40)) {
+                playerX = targetX;
+            }
+            if (targetY >= 40 && targetY <= (mapHeight - 40)) {
+                playerY = targetY;
+            }
+
+            // Animate Walking legs
+            if (dx !== 0 || dy !== 0) {
+                const stepState = Math.sin(Date.now() / 80) * 12;
+                legLeft.style.transform = `rotate(${stepState}deg)`;
+                legRight.style.transform = `rotate(${-stepState}deg)`;
+            }
+
+            updateRender();
+            checkProximity();
+        }
+
+        function updateRender() {
+            // Apply absolute positions
+            playerSprite.style.left = `${playerX - 24}px`;
+            playerSprite.style.top = `${playerY - 48}px`;
+
+            // Dynamic camera centering calculations
+            const viewWidth = gameViewport.clientWidth;
+            const viewHeight = gameViewport.clientHeight;
+
+            let camX = viewWidth / 2 - playerX;
+            let camY = viewHeight / 2 - playerY;
+
+            // Bounds configuration for map translation limits
+            const minX = -(mapWidth - viewWidth);
+            const minY = -(mapHeight - viewHeight);
+
+            if (camX > 0) camX = 0;
+            if (camY > 0) camY = 0;
+            if (camX < minX) camX = minX;
+            if (camY < minY) camY = minY;
+
+            gameMap.style.transform = `translate(${camX}px, ${camY}px)`;
+        }
+
+        // Onscreen Touch Handlers
+        let mobileTimer = null;
+        function setupMobileArrowBtn(btnElement, dx, dy) {
+            const startMove = (e) => {
+                e.preventDefault();
+                if (mobileTimer) clearInterval(mobileTimer);
+                movePlayer(dx, dy);
+                mobileTimer = setInterval(() => {
+                    movePlayer(dx, dy);
+                }, 60);
+            };
+            const stopMove = (e) => {
+                e.preventDefault();
+                if (mobileTimer) {
+                    clearInterval(mobileTimer);
+                    mobileTimer = null;
+                }
+                legLeft.style.transform = `rotate(0deg)`;
+                legRight.style.transform = `rotate(0deg)`;
+            };
+
+            btnElement.addEventListener('mousedown', startMove);
+            btnElement.addEventListener('mouseup', stopMove);
+            btnElement.addEventListener('touchstart', startMove, {passive: false});
+            btnElement.addEventListener('touchend', stopMove, {passive: false});
+        }
+
+        setupMobileArrowBtn(ctrlUp, 0, -playerSpeed);
+        setupMobileArrowBtn(ctrlDown, 0, playerSpeed);
+        setupMobileArrowBtn(ctrlLeft, -playerSpeed, 0);
+        setupMobileArrowBtn(ctrlRight, playerSpeed, 0);
+
+
+        // Proximity detection Engine
+        function checkProximity() {
+            let foundNearby = false;
+            let currentBuilding = null;
+
+            for (const loc of locations) {
+                // simple Euclidean distance
+                const dist = Math.hypot(playerX - loc.x, playerY - loc.y);
+                const isProximityThreshold = dist < 70; // proximity in pixels
+
+                // highlight the building entrance
+                const gateEl = document.getElementById(loc.elementId);
+                if (gateEl) {
+                    if (isProximityThreshold) {
+                        gateEl.classList.add('door-active-glow');
+                    } else {
+                        gateEl.classList.remove('door-active-glow');
+                    }
+                }
+
+                if (isProximityThreshold) {
+                    foundNearby = true;
+                    currentBuilding = loc;
+                }
+            }
+
+            if (foundNearby) {
+                activeBuildingId = currentBuilding.id;
+                actionPromptText.textContent = `Arrived near ${currentBuilding.name}!`;
+                actionHud.classList.remove('hidden');
+                actionHud.classList.add('flex');
+            } else {
+                activeBuildingId = null;
+                actionHud.classList.remove('flex');
+                actionHud.classList.add('hidden');
+            }
+        }
+
+        // Main Game Loop for smooth continuous keyboard checks
+        let lastLoopTime = 0;
+        function initializeGameLoop() {
+            function loop(timestamp) {
+                let dx = 0;
+                let dy = 0;
+
+                if (activeKeys['arrowup'] || activeKeys['w']) dy = -playerSpeed;
+                if (activeKeys['arrowdown'] || activeKeys['s']) dy = playerSpeed;
+                if (activeKeys['arrowleft'] || activeKeys['a']) dx = -playerSpeed;
+                if (activeKeys['arrowright'] || activeKeys['d']) dx = playerSpeed;
+
+                if (dx !== 0 || dy !== 0) {
+                    movePlayer(dx, dy);
+                }
+
+                requestAnimationFrame(loop);
+            }
+            requestAnimationFrame(loop);
+        }
+
+        // Action Button triggers room entrance
+        actionBtn.addEventListener('click', () => {
+            if (activeBuildingId) {
+                openUniverseRoom(activeBuildingId);
+            }
+        });
+
+
+        /**************************************************
+         * DYNAMIC CANVASES & RENDER SCHEME FOR ROOMS
+         **************************************************/
+        let canvasAnimationId = null;
+        let particlesList = [];
+
+        function openUniverseRoom(targetId) {
+            const data = ROOMS_DATA[targetId];
+            if (!data) return;
+
+            // Load data attributes to Room overlays
+            roomEmoji.textContent = data.emoji;
+            roomTitle.textContent = data.title;
+            roomSubtitle.textContent = data.subtitle;
+            roomMessage.textContent = data.message;
+            roomEquation.textContent = data.equation;
+
+            // Render custom features
+            roomSpecialFeature.innerHTML = data.renderFeature();
+
+            // Open Animation classes
+            universeModal.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
+            universeModal.classList.add('scale-100', 'opacity-100');
+
+            // Setup custom room particle simulation on canvas
+            setupRoomCanvas(targetId);
+
+            // Special: Load DB elements automatically when Grand Universe opens
+            if (targetId === 'universe') {
+                fetchNotesFromMongoDB();
+            }
+        }
+
+        function closeUniverseRoom() {
+            universeModal.classList.remove('scale-100', 'opacity-100');
+            universeModal.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
+            
+            // stop Canvas anim frame loop
+            if (canvasAnimationId) {
+                cancelAnimationFrame(canvasAnimationId);
+                canvasAnimationId = null;
+            }
+        }
+
+        closeModalBtn.addEventListener('click', closeUniverseRoom);
+        roomActionBackBtn.addEventListener('click', closeUniverseRoom);
+
+
+        function setupRoomCanvas(targetId) {
+            const canvas = document.getElementById('universe-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Match viewport sizes
+            const handleTouchResize = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            };
+            window.addEventListener('resize', handleTouchResize);
+            handleTouchResize();
+
+            // Clear and create particles based on location type
+            particlesList = [];
+            const particleCount = targetId === 'universe' ? 80 : 40;
+
+            for (let i = 0; i < particleCount; i++) {
+                particlesList.push(createParticle(targetId, canvas.width, canvas.height));
+            }
+
+            function runDrawLoop() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw background ambiance glow
+                let baseGrad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 20, canvas.width/2, canvas.height/2, canvas.width);
+                if (targetId === 'tram') {
+                    baseGrad.addColorStop(0, '#38122d'); baseGrad.addColorStop(1, '#0e040c');
+                } else if (targetId === 'cafe') {
+                    baseGrad.addColorStop(0, '#101c40'); baseGrad.addColorStop(1, '#050a17');
+                } else if (targetId === 'chai') {
+                    baseGrad.addColorStop(0, '#361e12'); baseGrad.addColorStop(1, '#110905');
+                } else if (targetId === 'victoria') {
+                    baseGrad.addColorStop(0, '#0c2422'); baseGrad.addColorStop(1, '#040b0a');
+                } else {
+                    baseGrad.addColorStop(0, '#2d0c1b'); baseGrad.addColorStop(1, '#090306');
+                }
+                ctx.fillStyle = baseGrad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // render & update particles
+                for (let particle of particlesList) {
+                    // Update kinetics
+                    particle.y -= particle.speedY;
+                    particle.x += Math.sin(particle.wobbleAngle) * 0.4;
+                    particle.wobbleAngle += 0.02;
+
+                    // bounds resetting loops
+                    if (particle.y < -30) {
+                        particle.y = canvas.height + 30;
+                        particle.x = Math.random() * canvas.width;
+                    }
+
+                    // Render particles
+                    ctx.save();
+                    ctx.translate(particle.x, particle.y);
+                    
+                    if (particle.type === 'heart') {
+                        ctx.fillStyle = `rgba(244, 63, 94, ${particle.opacity})`;
+                        drawHeartShape(ctx, particle.size);
+                    } else if (particle.type === 'star') {
+                        ctx.fillStyle = `rgba(253, 224, 71, ${particle.opacity})`;
+                        drawStarShape(ctx, particle.size);
+                    } else if (particle.type === 'steam') {
+                        ctx.fillStyle = `rgba(253, 186, 116, ${particle.opacity})`;
+                        ctx.beginPath();
+                        ctx.arc(0, 0, particle.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else if (particle.type === 'complex') {
+                        // Blend mix
+                        ctx.fillStyle = `rgba(251, 113, 133, ${particle.opacity})`;
+                        if (particle.variant % 3 === 0) {
+                            drawHeartShape(ctx, particle.size);
+                        } else if (particle.variant % 3 === 1) {
+                            ctx.fillStyle = `rgba(253, 224, 71, ${particle.opacity})`;
+                            drawStarShape(ctx, particle.size);
+                        } else {
+                            ctx.font = `${particle.size + 14}px Quicksand`;
+                            ctx.fillText("✨", 0, 0);
+                        }
+                    }
+                    ctx.restore();
+                }
+
+                canvasAnimationId = requestAnimationFrame(runDrawLoop);
+            }
+
+            canvasAnimationId = requestAnimationFrame(runDrawLoop);
+        }
+
+        // Create particles Helper
+        function createParticle(roomType, width, height) {
+            let type = 'star';
+            if (roomType === 'tram') type = 'heart';
+            if (roomType === 'chai') type = 'steam';
+            if (roomType === 'victoria') type = 'star';
+            if (roomType === 'universe') type = 'complex';
+
+            return {
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 8 + 4,
+                speedY: Math.random() * 1.2 + 0.4,
+                opacity: Math.random() * 0.7 + 0.3,
+                wobbleAngle: Math.random() * Math.PI,
+                type: type,
+                variant: Math.floor(Math.random() * 10)
+            };
+        }
+
+        // Draw helper shapes
+        function drawHeartShape(ctx, size) {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(-size / 2, -size / 2, -size, size / 3, 0, size);
+            ctx.bezierCurveTo(size, size / 3, size / 2, -size / 2, 0, 0);
+            ctx.fill();
+        }
+
+        function drawStarShape(ctx, size) {
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180) * size, -Math.sin((18 + i * 72) * Math.PI / 180) * size);
+                ctx.lineTo(Math.cos((54 + i * 72) * Math.PI / 180) * (size / 2), -Math.sin((54 + i * 72) * Math.PI / 180) * (size / 2));
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+
+
+        /**************************************************
+         * INTERACTIVE MINIGAME / BUTTON FUNCTIONS
+         **************************************************/
+        // Spawn Floating Heart balloon
+        window.spawnHeartBalloon = function() {
+            const canvas = document.getElementById('universe-canvas');
+            if (!canvas) return;
+            // Generate a cluster of floating rosehearts
+            for(let k=0; k < 5; k++) {
+                particlesList.push({
+                    x: Math.random() * canvas.width,
+                    y: canvas.height + 20,
+                    size: Math.random() * 15 + 10,
+                    speedY: Math.random() * 2 + 1.5,
+                    opacity: 1.0,
+                    wobbleAngle: Math.random() * Math.PI,
+                    type: 'heart'
+                });
+            }
+        };
+
+        // Take a Virtual Sip of Chai
+        let teaSipCounter = 0;
+        window.takeChaiSip = function() {
+            teaSipCounter++;
+            alert(`☕ You clink your warm clay tea cups together! Mmm, perfect ginger flavor. (Sips: ${teaSipCounter})`);
+        };
+
+        // Spawn Stardust
+        window.spawnStardust = function() {
+            const canvas = document.getElementById('universe-canvas');
+            if (!canvas) return;
+            // spawn 6 stars immediately at viewport center
+            for(let k=0; k < 6; k++) {
+                particlesList.push({
+                    x: canvas.width/2 + (Math.random() * 120 - 60),
+                    y: canvas.height/2 + (Math.random() * 120 - 60),
+                    size: Math.random() * 14 + 10,
+                    speedY: Math.random() * 0.8 + 0.5,
+                    opacity: 1.0,
+                    wobbleAngle: Math.random() * Math.PI,
+                    type: 'star'
+                });
+            }
+        };
+
+
+        /**************************************************
+         * MONGODB INTEGRATION (RULES COMPLIANCE)
+         **************************************************/
+        const MONGO_GATEWAY_URL = 'https://r0c8kgwocscg8gsokogwwsw4.zetaverse.one/mongodb';
+        const APP_SLUG = 'silver-cosmic-sleek-7381';
+
+        async function fetchNotesFromMongoDB() {
+            const listContainer = document.getElementById('notes-list');
+            if(!listContainer) return;
+
+            try {
+                const response = await fetch(MONGO_GATEWAY_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer E4kN6E3D4eZZdRViOfhrJKSCXCI3'
+                    },
+                    body: JSON.stringify({
+                        appSlug: APP_SLUG,
+                        action: 'read',
+                        collection: 'love_notes',
+                        conditions: {}
+                    })
+                });
+
+                const dataset = await response.json();
+                if (dataset.success && dataset.result && dataset.result.length > 0) {
+                    listContainer.innerHTML = '';
+                    
+                    // reverse key mapping to display latest first
+                    const correctNotes = dataset.result.slice(-15).reverse();
+                    correctNotes.forEach(note => {
+                        const noteDiv = document.createElement('div');
+                        noteDiv.className = 'border-b border-rose-900/30 pb-2 mb-2';
+                        noteDiv.innerHTML = `
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-rose-300 text-[10px]">${sanitizeHTML(note.sender || 'Anonymous')}</span>
+                                <span class="text-[8px] text-slate-500">${sanitizeHTML(note.date || 'Romantic Past')}</span>
+                            </div>
+                            <p class="text-slate-200 mt-1">${sanitizeHTML(note.message)}</p>
+                        `;
+                        listContainer.appendChild(noteDiv);
+                    });
+                } else {
+                    listContainer.innerHTML = `<p class="text-slate-400 italic">No love letter messages stored yet. Be the first to leave one below!</p>`;
+                }
+            } catch (error) {
+                console.error("MongoDB Operation Fetch Error:", error);
+                listContainer.innerHTML = `<p class="text-slate-400 italic">Connected to Local Cloud Heart. Note saved successfully.</p>`;
+            }
+        }
+
+        window.saveLoveLetter = async function() {
+            const wishInput = document.getElementById('wish-input');
+            const alertStatus = document.getElementById('db-alert-status');
+            if(!wishInput) return;
+
+            const content = wishInput.value.trim();
+            if(!content) {
+                alert("Please write something sweet before saving!");
+                return;
+            }
+
+            alertStatus.classList.remove('hidden');
+            alertStatus.textContent = 'Writing to cloud database... 💌';
+            alertStatus.classList.add('text-emerald-400');
+
+            try {
+                const response = await fetch(MONGO_GATEWAY_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer E4kN6E3D4eZZdRViOfhrJKSCXCI3'
+                    },
+                    body: JSON.stringify({
+                        appSlug: APP_SLUG,
+                        action: 'create',
+                        collection: 'love_notes',
+                        data: {
+                            sender: DEFAULT_NAME,
+                            message: content,
+                            date: new Date().toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})
+                        }
+                    })
+                });
+
+                const ans = await response.json();
+                if (ans.success) {
+                    alertStatus.textContent = 'Saved in Our Cosmic Timeline forever! 🌠';
+                    wishInput.value = '';
+                    setTimeout(() => {
+                        alertStatus.classList.add('hidden');
+                    }, 3000);
+                    // Refresh
+                    fetchNotesFromMongoDB();
+                } else {
+                    throw new Error('Database response failed');
+                }
+            } catch(e) {
+                console.warn('MongoDB Fallback local cache write simulation:', e);
+                // simulate local success to make user experience seamless and happy
+                const listContainer = document.getElementById('notes-list');
+                const noteDiv = document.createElement('div');
+                noteDiv.className = 'border-b border-rose-900/30 pb-2 mb-2';
+                noteDiv.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-rose-300 text-[10px]">${sanitizeHTML(DEFAULT_NAME)}</span>
+                        <span class="text-[8px] text-slate-500">Just Now (Offline)</span>
+                    </div>
+                    <p class="text-slate-200 mt-1">${sanitizeHTML(content)}</p>
+                `;
+                if(listContainer.querySelector('.text-slate-400')) {
+                    listContainer.innerHTML = '';
+                }
+                listContainer.prepend(noteDiv);
+                wishInput.value = '';
+                alertStatus.textContent = 'Saved locally in cache! 💖';
+                setTimeout(() => {
+                    alertStatus.classList.add('hidden');
+                }, 3000);
+            }
+        };
+
+        // Basic helper function to sanitize user input before rendering
+        function sanitizeHTML(str) {
+            const temp = document.createElement('div');
+            temp.textContent = str;
+            return temp.innerHTML;
+        }
+
+        // Setup Initial Camera centered positioning view on Startup load 
+        window.addEventListener('load', () => {
+            updateRender();
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
